@@ -6,11 +6,13 @@ dist/
 build/
 
 # Runtime/generated outputs
-outputs/
 storage/runs/*
+storage/model-comparisons/*
+
 
 # Keep folder placeholders
 !storage/runs/.gitkeep
+!storage/model-comparisons/.gitkeep
 
 # Environment/secrets
 .env
