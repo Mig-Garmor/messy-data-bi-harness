@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "tsx src/cli.ts",
     "task": "tsx src/cli.ts task",
+    "list-tasks": "tsx src/cli.ts list-tasks",
     "compare-models": "tsx src/cli.ts compare-models",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
