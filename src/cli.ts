@@ -63,6 +63,7 @@ async function main(): Promise<void> {
       providerNames: ["mock", "verbose-mock"],
     });
     const comparisonPath = await saveModelComparison({
+      modelComparisonsDir: config.modelComparisonsDir,
       taskName: task.id,
       results,
     });

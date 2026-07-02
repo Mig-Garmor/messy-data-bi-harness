@@ -50,10 +50,11 @@ export async function compareModels(options: {
 }
 
 export async function saveModelComparison(options: {
+  modelComparisonsDir: string;
   taskName: string;
   results: unknown;
 }): Promise<string> {
-  const dir = join(process.cwd(), "outputs", "model-comparisons", options.taskName);
+  const dir = join(process.cwd(), options.modelComparisonsDir, options.taskName);
   await mkdir(dir, { recursive: true });
 
   const comparisonPath = join(dir, "comparison.json");
