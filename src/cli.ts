@@ -1,12 +1,19 @@
 import { randomUUID } from "node:crypto";
 import { relative } from "node:path";
 
+import "dotenv/config";
+
 import { loadConfig } from "./config/loadConfig";
-import { compareModels, saveModelComparison } from "./modelRunner/compareModels";
+import {
+  compareModels,
+  saveModelComparison,
+} from "./modelRunner/compareModels";
 import { createRun } from "./tracing/createRun";
 import { writeTrace } from "./tracing/writeTrace";
 import { getTask, listTasks } from "./tasks/registry";
 import { runTask } from "./tasks/runTask";
+
+import "dotenv/config";
 
 async function main(): Promise<void> {
   const config = loadConfig();
@@ -44,7 +51,13 @@ async function main(): Promise<void> {
       createdAt: run.createdAt,
     });
 
-    console.log(JSON.stringify({ runId: run.id, tracePath, passed: result.passed }, null, 2));
+    console.log(
+      JSON.stringify(
+        { runId: run.id, tracePath, passed: result.passed },
+        null,
+        2,
+      ),
+    );
     return;
   }
 

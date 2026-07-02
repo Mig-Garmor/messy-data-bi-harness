@@ -2,8 +2,8 @@ import type { ModelAssignment } from "../modelRunner/types";
 
 const taskModelAssignments: Record<string, ModelAssignment> = {
   "smoke-test": {
-    model: "mock-model",
-    provider: "mock",
+    model: "openai/gpt-oss-20b",
+    provider: "openrouter",
   },
 };
 
@@ -13,8 +13,8 @@ const comparisonModelAssignments: ModelAssignment[] = [
     provider: "mock",
   },
   {
-    model: "mock-model",
-    provider: "verbose-mock",
+    model: "openai/gpt-oss-20b",
+    provider: "openrouter",
   },
 ];
 
@@ -32,5 +32,8 @@ export const appConfig = {
 } as const;
 
 export function getTaskModelAssignment(taskId: string): ModelAssignment {
-  return appConfig.taskModelAssignments[taskId] ?? appConfig.defaultTaskModelAssignment;
+  return (
+    appConfig.taskModelAssignments[taskId] ??
+    appConfig.defaultTaskModelAssignment
+  );
 }
