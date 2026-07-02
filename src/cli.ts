@@ -1,3 +1,5 @@
+import { randomUUID } from "node:crypto";
+
 import { loadConfig } from "./config/loadConfig";
 import { createRun } from "./tracing/createRun";
 import { writeTrace } from "./tracing/writeTrace";
@@ -15,21 +17,30 @@ async function main(): Promise<void> {
   }
 
   if (command === "task") {
-    const taskId = process.argv[3] ?? "smoke-test";
+    const { taskId, promptPath } = parseTaskArgs(process.argv.slice(3));
     const task = getTask(taskId);
     const run = createRun();
     const result = await task.run({
       runId: run.id,
       model: config.defaultModel,
       provider: config.defaultProvider,
+      promptPath,
     });
 
     const tracePath = await writeTrace(config.runsDir, {
+      traceId: randomUUID(),
       runId: run.id,
+      taskName: result.taskName,
+      promptVersion: result.prompt.version,
+      provider: result.modelResult.provider,
+      model: result.modelResult.model,
+      input: result.input,
+      prompt: result.prompt.content,
+      rawOutput: result.rawOutput,
+      parsedOutput: result.parsedOutput,
+      usage: getTraceUsage(result.modelResult.usage),
+      durationMs: result.timing.durationMs,
       createdAt: run.createdAt,
-      taskId: result.taskId,
-      passed: result.passed,
-      data: result,
     });
 
     console.log(JSON.stringify({ runId: run.id, tracePath, passed: result.passed }, null, 2));
@@ -47,3 +58,60 @@ main().catch((error: unknown) => {
   console.error(error instanceof Error ? error.message : error);
   process.exitCode = 1;
 });
+
+interface TaskCliArgs {
+  taskId: string;
+  promptPath?: string;
+}
+
+interface ModelUsage {
+  inputTokens: number;
+  outputTokens: number;
+}
+
+function getTraceUsage(usage: ModelUsage | undefined): TraceUsage | undefined {
+  if (!usage) {
+    return undefined;
+  }
+
+  return {
+    inputTokens: usage.inputTokens,
+    outputTokens: usage.outputTokens,
+    totalTokens: usage.inputTokens + usage.outputTokens,
+  };
+}
+
+interface TraceUsage {
+  inputTokens?: number;
+  outputTokens?: number;
+  totalTokens?: number;
+}
+
+function parseTaskArgs(args: string[]): TaskCliArgs {
+  let taskId = "smoke-test";
+  let promptPath: string | undefined;
+
+  for (let index = 0; index < args.length; index += 1) {
+    const arg = args[index];
+
+    if (arg === "--prompt") {
+      const value = args[index + 1];
+
+      if (!value || value.startsWith("--")) {
+        throw new Error("Missing value for --prompt");
+      }
+
+      promptPath = value;
+      index += 1;
+      continue;
+    }
+
+    if (arg.startsWith("--")) {
+      throw new Error(`Unknown option: ${arg}`);
+    }
+
+    taskId = arg;
+  }
+
+  return { taskId, promptPath };
+}
