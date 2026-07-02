@@ -1,6 +1,8 @@
 import { randomUUID } from "node:crypto";
+import { relative } from "node:path";
 
 import { loadConfig } from "./config/loadConfig";
+import { compareModels, saveModelComparison } from "./modelRunner/compareModels";
 import { createRun } from "./tracing/createRun";
 import { writeTrace } from "./tracing/writeTrace";
 import { getTask, listTasks } from "./tasks/registry";
@@ -48,7 +50,25 @@ async function main(): Promise<void> {
   }
 
   if (command === "compare-models") {
-    throw new Error("compare-models is not implemented yet.");
+    const { taskId, promptPath } = parseTaskArgs(process.argv.slice(3));
+    const task = getTask(taskId);
+    const run = createRun();
+    const results = await compareModels({
+      task,
+      context: {
+        runId: run.id,
+        model: config.defaultModel,
+        promptPath,
+      },
+      providerNames: ["mock", "verbose-mock"],
+    });
+    const comparisonPath = await saveModelComparison({
+      taskName: task.id,
+      results,
+    });
+
+    console.log(relative(process.cwd(), comparisonPath));
+    return;
   }
 
   throw new Error(`Unknown command: ${command}`);

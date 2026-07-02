@@ -1,8 +1,10 @@
 import { MockModelProvider } from "./providers/MockModelProvider";
+import { VerboseMockModelProvider } from "./providers/VerboseMockModelProvider";
 import type { ModelProvider, ModelRunRequest, ModelRunResult } from "./types";
 
 const providers: Record<string, ModelProvider> = {
   mock: new MockModelProvider(),
+  "verbose-mock": new VerboseMockModelProvider(),
 };
 
 export async function runModel(
