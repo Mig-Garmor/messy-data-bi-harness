@@ -1,28 +1,17 @@
 import type { ModelAssignment } from "../modelRunner/types";
+import { modelCatalog } from "./modelCatalog";
 
 const taskModelAssignments: Record<string, ModelAssignment> = {
-  "smoke-test": {
-    model: "openai/gpt-oss-20b",
-    provider: "openrouter",
-  },
+  "smoke-test": modelCatalog.openRouterNvidiaNemotronNano9bV2Free,
 };
 
 const comparisonModelAssignments: ModelAssignment[] = [
-  {
-    model: "mock-model",
-    provider: "mock",
-  },
-  {
-    model: "openai/gpt-oss-20b",
-    provider: "openrouter",
-  },
+  modelCatalog.mockDefault,
+  modelCatalog.openRouterOpenAiGptOss20bFree,
 ];
 
 export const appConfig = {
-  defaultTaskModelAssignment: {
-    model: "mock-model",
-    provider: "mock",
-  },
+  defaultTaskModelAssignment: modelCatalog.mockDefault,
   taskModelAssignments,
   comparisonModelAssignments,
   storage: {
