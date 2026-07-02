@@ -1,0 +1,34 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+build/
+
+# Runtime/generated outputs
+outputs/
+storage/runs/*
+
+# Keep folder placeholders
+!storage/runs/.gitkeep
+
+# Environment/secrets
+.env
+.env.*
+!.env.example
+
+# Logs
+*.log
+logs/
+
+# OS/editor noise
+.DS_Store
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+.idea/
+
+# Coverage/cache
+coverage/
+.cache/
+.turbo/
