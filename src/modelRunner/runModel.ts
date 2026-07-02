@@ -7,7 +7,7 @@ const providers: Record<string, ModelProvider> = Object.fromEntries(
 
 export async function runModel(
   request: ModelRunRequest,
-  providerName = "mock",
+  providerName: string,
 ): Promise<ModelRunResult> {
   const provider = providers[providerName];
 

@@ -11,6 +11,11 @@ export interface ModelRunRequest {
   temperature?: number;
 }
 
+export interface ModelAssignment {
+  model: string;
+  provider: string;
+}
+
 export interface ModelRunResult {
   provider: string;
   model: string;

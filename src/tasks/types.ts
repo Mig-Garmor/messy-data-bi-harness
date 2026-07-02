@@ -1,10 +1,13 @@
-import type { ModelRunResult } from "../modelRunner/types";
+import type { ModelAssignment, ModelRunResult } from "../modelRunner/types";
 
 export interface TaskContext {
   runId: string;
-  model: string;
-  provider: string;
   promptPath?: string;
+}
+
+// Used for tasks that need to be run with a specific model assignment, such as comparison tasks.
+export interface TaskRunOptions {
+  modelAssignment?: ModelAssignment;
 }
 
 export interface PromptTrace {
@@ -43,5 +46,5 @@ export interface TaskResult {
 export interface Task {
   id: string;
   description: string;
-  run(context: TaskContext): Promise<TaskResult>;
+  run(context: TaskContext, options?: TaskRunOptions): Promise<TaskResult>;
 }

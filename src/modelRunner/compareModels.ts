@@ -2,6 +2,7 @@ import { mkdir, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 
 import type { Task, TaskContext } from "../tasks/types";
+import type { ModelAssignment } from "./types";
 
 export interface ModelComparisonResult {
   provider: string;
@@ -18,16 +19,13 @@ export interface ModelComparisonResult {
 
 export async function compareModels(options: {
   task: Task;
-  context: Omit<TaskContext, "provider">;
-  providerNames: string[];
+  context: TaskContext;
+  modelAssignments: ModelAssignment[];
 }): Promise<ModelComparisonResult[]> {
   const results: ModelComparisonResult[] = [];
 
-  for (const providerName of options.providerNames) {
-    const result = await options.task.run({
-      ...options.context,
-      provider: providerName,
-    });
+  for (const modelAssignment of options.modelAssignments) {
+    const result = await options.task.run(options.context, { modelAssignment });
 
     results.push({
       provider: result.modelResult.provider,

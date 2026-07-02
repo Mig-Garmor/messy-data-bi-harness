@@ -24,8 +24,6 @@ async function main(): Promise<void> {
     const run = createRun();
     const result = await task.run({
       runId: run.id,
-      model: config.defaultModel,
-      provider: config.defaultProvider,
       promptPath,
     });
 
@@ -57,10 +55,9 @@ async function main(): Promise<void> {
       task,
       context: {
         runId: run.id,
-        model: config.defaultModel,
         promptPath,
       },
-      providerNames: [config.comparisonProviderOne, config.comparisonProviderTwo],
+      modelAssignments: config.comparisonModelAssignments,
     });
     const comparisonPath = await saveModelComparison({
       modelComparisonsDir: config.modelComparisonsDir,

@@ -2,28 +2,42 @@ import { createHash } from "node:crypto";
 import { readFile } from "node:fs/promises";
 import { basename, isAbsolute, join, relative, resolve } from "node:path";
 
+import { getTaskModelAssignment } from "../config/appConfig";
 import { runModel } from "../modelRunner/runModel";
 import type { ModelMessage } from "../modelRunner/types";
-import type { ParsedOutputTrace, PromptTrace, Task, TaskContext, TaskResult } from "./types";
+import type {
+  ParsedOutputTrace,
+  PromptTrace,
+  Task,
+  TaskContext,
+  TaskResult,
+  TaskRunOptions,
+} from "./types";
 
 const defaultPromptPath = "prompts/smoke-test.v1.md";
 
 export const smokeTestTask: Task = {
   id: "smoke-test",
   description: "Checks that the model runner can execute a basic prompt.",
-  async run(context: TaskContext): Promise<TaskResult> {
+  async run(
+    context: TaskContext,
+    options: TaskRunOptions = {},
+  ): Promise<TaskResult> {
     const startedAtMs = Date.now();
     const startedAt = new Date(startedAtMs).toISOString();
     const prompt = await loadPrompt(context.promptPath ?? defaultPromptPath);
     const input: { messages: ModelMessage[] } = {
       messages: [{ role: "user", content: prompt.content }],
     };
+    // Optional assignment for tasks that need to be run with a specific model assignment, such as comparison tasks.
+    const assignment =
+      options.modelAssignment ?? getTaskModelAssignment(smokeTestTask.id);
     const modelResult = await runModel(
       {
-        model: context.model,
+        model: assignment.model,
         messages: input.messages,
       },
-      context.provider,
+      assignment.provider,
     );
     const parsedOutput = parseSmokeTestOutput(modelResult.output);
     const completedAtMs = Date.now();
@@ -47,7 +61,9 @@ export const smokeTestTask: Task = {
 };
 
 async function loadPrompt(promptPath: string): Promise<PromptTrace> {
-  const absolutePath = isAbsolute(promptPath) ? promptPath : join(process.cwd(), promptPath);
+  const absolutePath = isAbsolute(promptPath)
+    ? promptPath
+    : join(process.cwd(), promptPath);
   const content = await readFile(absolutePath, "utf8");
 
   return {
@@ -78,7 +94,8 @@ function parseSmokeTestOutput(output: string): ParsedOutputTrace {
   return {
     normalizedOutput,
     sentences,
-    wordCount: normalizedOutput === "" ? 0 : normalizedOutput.split(/\s+/).length,
+    wordCount:
+      normalizedOutput === "" ? 0 : normalizedOutput.split(/\s+/).length,
     isNonEmpty: normalizedOutput.length > 0,
   };
 }
