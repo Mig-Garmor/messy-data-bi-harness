@@ -1,11 +1,9 @@
-import { MockModelProvider } from "./providers/MockModelProvider";
-import { VerboseMockModelProvider } from "./providers/VerboseMockModelProvider";
+import { modelProviders } from "./providers";
 import type { ModelProvider, ModelRunRequest, ModelRunResult } from "./types";
 
-const providers: Record<string, ModelProvider> = {
-  mock: new MockModelProvider(),
-  "verbose-mock": new VerboseMockModelProvider(),
-};
+const providers: Record<string, ModelProvider> = Object.fromEntries(
+  modelProviders.map((provider) => [provider.name, provider]),
+);
 
 export async function runModel(
   request: ModelRunRequest,

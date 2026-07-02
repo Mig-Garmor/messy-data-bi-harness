@@ -1,4 +1,4 @@
-import type { ModelProvider, ModelRunRequest, ModelRunResult } from "../types";
+import type { ModelProvider, ModelRunRequest, ModelRunResult } from "../../types";
 
 interface ConfigurableMockModelProviderOptions {
   name: string;
