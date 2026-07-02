@@ -1,6 +1,7 @@
 import { mkdir, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 
+import { runTask } from "../tasks/runTask";
 import type { Task, TaskContext } from "../tasks/types";
 import type { ModelAssignment } from "./types";
 
@@ -25,7 +26,7 @@ export async function compareModels(options: {
   const results: ModelComparisonResult[] = [];
 
   for (const modelAssignment of options.modelAssignments) {
-    const result = await options.task.run(options.context, { modelAssignment });
+    const result = await runTask(options.task, options.context, { modelAssignment });
 
     results.push({
       provider: result.modelResult.provider,

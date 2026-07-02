@@ -2,7 +2,6 @@ import { createHash } from "node:crypto";
 import { readFile } from "node:fs/promises";
 import { basename, isAbsolute, join, relative, resolve } from "node:path";
 
-import { getTaskModelAssignment } from "../config/appConfig";
 import { runModel } from "../modelRunner/runModel";
 import type { ModelMessage } from "../modelRunner/types";
 import type {
@@ -21,7 +20,7 @@ export const smokeTestTask: Task = {
   description: "Checks that the model runner can execute a basic prompt.",
   async run(
     context: TaskContext,
-    options: TaskRunOptions = {},
+    options: TaskRunOptions,
   ): Promise<TaskResult> {
     const startedAtMs = Date.now();
     const startedAt = new Date(startedAtMs).toISOString();
@@ -29,9 +28,7 @@ export const smokeTestTask: Task = {
     const input: { messages: ModelMessage[] } = {
       messages: [{ role: "user", content: prompt.content }],
     };
-    // Optional assignment for tasks that need to be run with a specific model assignment, such as comparison tasks.
-    const assignment =
-      options.modelAssignment ?? getTaskModelAssignment(smokeTestTask.id);
+    const assignment = options.modelAssignment;
     const modelResult = await runModel(
       {
         model: assignment.model,

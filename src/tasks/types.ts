@@ -5,9 +5,8 @@ export interface TaskContext {
   promptPath?: string;
 }
 
-// Used for tasks that need to be run with a specific model assignment, such as comparison tasks.
 export interface TaskRunOptions {
-  modelAssignment?: ModelAssignment;
+  modelAssignment: ModelAssignment;
 }
 
 export interface PromptTrace {
@@ -46,5 +45,5 @@ export interface TaskResult {
 export interface Task {
   id: string;
   description: string;
-  run(context: TaskContext, options?: TaskRunOptions): Promise<TaskResult>;
+  run(context: TaskContext, options: TaskRunOptions): Promise<TaskResult>;
 }

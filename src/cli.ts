@@ -6,6 +6,7 @@ import { compareModels, saveModelComparison } from "./modelRunner/compareModels"
 import { createRun } from "./tracing/createRun";
 import { writeTrace } from "./tracing/writeTrace";
 import { getTask, listTasks } from "./tasks/registry";
+import { runTask } from "./tasks/runTask";
 
 async function main(): Promise<void> {
   const config = loadConfig();
@@ -22,7 +23,7 @@ async function main(): Promise<void> {
     const { taskId, promptPath } = parseTaskArgs(process.argv.slice(3));
     const task = getTask(taskId);
     const run = createRun();
-    const result = await task.run({
+    const result = await runTask(task, {
       runId: run.id,
       promptPath,
     });
