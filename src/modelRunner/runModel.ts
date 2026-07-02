@@ -1,4 +1,4 @@
-import { modelProviders } from "./providers";
+import { modelProviders } from "./providers/registry";
 import type { ModelProvider, ModelRunRequest, ModelRunResult } from "./types";
 
 const providers: Record<string, ModelProvider> = Object.fromEntries(
