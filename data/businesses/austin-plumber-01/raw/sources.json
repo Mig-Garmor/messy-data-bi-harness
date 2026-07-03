@@ -1,0 +1,16 @@
+[
+  {
+    "sourceId": "src-official-homepage",
+    "sourceType": "official_website",
+    "url": "https://radiantplumbing.com/",
+    "collectedAt": "2026-07-03",
+    "notes": "Official homepage used for business identity, positioning, services, service area, phone, address, licenses, guarantees, and contact funnel."
+  },
+  {
+    "sourceId": "src-official-reviews",
+    "sourceType": "official_website_reviews",
+    "url": "https://radiantplumbing.com/reviews/",
+    "collectedAt": "2026-07-03",
+    "notes": "Official reviews page used for review/reputation claims, alternate Austin phone number, contact form fields, and repeated footer/location details."
+  }
+]

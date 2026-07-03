@@ -1,0 +1,25 @@
+{
+  "businessId": "austin-plumber-01",
+  "businessName": "Radiant Plumbing, Air Conditioning & Electrical",
+  "category": "plumbing",
+  "location": {
+    "city": "Austin",
+    "region": "TX",
+    "country": "US"
+  },
+  "status": "raw-packet-only",
+  "rawPacket": {
+    "path": "data/businesses/austin-plumber-01/raw/packet.md",
+    "format": "markdown"
+  },
+  "sources": {
+    "path": "data/businesses/austin-plumber-01/raw/sources.json",
+    "format": "json"
+  },
+  "notes": [
+    "Day 6 seed packet. One business only; do not expand to a larger corpus yet.",
+    "Business category is set to plumbing even though the company also offers HVAC and electrical services."
+  ],
+  "createdAt": "2026-07-03",
+  "updatedAt": "2026-07-03"
+}
